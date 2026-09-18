@@ -1,7 +1,25 @@
 [
     {
+        "name": "Gustavo",
         "email": "gustavoisr14@gmail.com",
         "phoneNumber": "69783681",
-        "password": "123456"
+        "password": "123456",
+        "role": "ADMINISTRADOR"
+    },
+    {
+        "name": "Kat",
+        "email": "gatoPancake@gmail.com",
+        "phoneNumber": "60701226",
+        "password": "gatos",
+        "role": "ADMINISTRADOR"
     }
+    ,
+    {
+        "name": "Coco",
+        "email": "gatoGordo@gmail.com",
+        "phoneNumber": "60711226",
+        "password": "gato",
+        "role": "EMPLEADO"
+    }
+
 ]
