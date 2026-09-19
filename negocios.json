@@ -1,0 +1,17 @@
+[
+    {
+        "nombreNegocio": "Veterinaria Mejicanos",
+        "propietarioEmail": "gatoGordo@gmail.com",
+        "tipo": "PROPIO",
+        "preguntasIA": [
+            "¨Cual fue el mes con mas gatos recibidos?"
+        ],
+        "sucursales": [
+            {
+                "id": "SUC-1",
+                "nombre": "Sucursal Veterinaria Miau -  Mejicanos",
+                "codigoAcceso": "12345678"
+            }
+        ]
+    }
+]

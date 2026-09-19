@@ -7,9 +7,11 @@ import java.io.File
 
 @Serializable
 data class User(
+    val name: String = "",
     val email: String,
     val phoneNumber: String,
-    val password: String
+    val password: String,
+    val role: String = "EMPLEADO"
 )
 
 fun main() {
@@ -31,10 +33,12 @@ fun main() {
     }
     
     // Variables para generar la informacion base del usuario
+    var name = ""
     var emaill = ""
     var phoneNumberr = ""
     var passwordd = ""
-    
+    var role = "EMPLEADO"
+
     // Variables para seleccion inicial
     var opcion: Int
     
@@ -50,11 +54,12 @@ fun main() {
             emaill = readln().trim()
             println("Por favor, Ingresa tu contraseña:")
             passwordd = readln().trim()
-            val usuarioExistente = listaUsuarios.any { it.email.equals(emaill, ignoreCase = true) && it.password.equals(passwordd, ignoreCase = true) }
-            if (usuarioExistente) {
+            val usuarioExistente = listaUsuarios.find { it.email.equals(emaill, ignoreCase = true) && it.password.equals(passwordd, ignoreCase = true) }
+            if (usuarioExistente != null) {
                 println("Bienvenido de nuevo, $emaill")
-                println("Que te gustaria hacer hoy?")
-                //Se llama a la lista de opciones que sigue en esta fase
+                Admin.showHome(usuarioExistente, listaUsuarios)
+            } else {
+                print("Usuario o contraseña incorrectos.")
             }
         }
         2 -> {

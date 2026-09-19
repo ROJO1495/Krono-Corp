@@ -1,6 +1,7 @@
 package Admin
 
 import Login.User
+import Negocio.negocioPropio
 
 fun showHome(usuario: User, listaUsuarios: MutableList<User>) {
 
@@ -33,13 +34,10 @@ fun showHome(usuario: User, listaUsuarios: MutableList<User>) {
             }
         }
 
-        "DUENO" -> {
-            println("1. ")
+        "DUENO", "EMPLEADO" -> {
+            negocioPropio(usuario)
         }
-
-        "EMPLEADO" -> {
-            println("1. ")
-        }
+        else -> println("Rol no reconocido.")
     }
 }
 
