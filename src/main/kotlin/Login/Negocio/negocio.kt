@@ -131,9 +131,9 @@ fun home(usuario: User, negocio: Negocio, listaNegocios: MutableList<Negocio>) {
             "1" -> formularioMiNegocio(negocio, listaNegocios)
             "2" -> administracionSucursales(negocio, listaNegocios)
             "3" -> asistentePersona4(negocio)
-            "4" -> historialReportesPersona4()
-            "5" -> historialGraficosPersona4()
-            "6" -> nuevaCuentaAdministracionPersona4()
+            "4" -> historialReportesPersona4(negocio)
+            "5" -> historialGraficosPersona4(negocio)
+            "6" -> nuevaCuentaAdministracionPersona4(usuario)
             "7" -> {
                 val sesionCerrada = menuConfiguracion(usuario, negocio, listaNegocios)
                 if (sesionCerrada) return
@@ -365,27 +365,11 @@ fun menuConfiguracion(usuario: User, negocio: Negocio, listaNegocios: MutableLis
 // ESPACIO RESERVADO PARA PERSONA 4
 // ==============================================================
 
-fun asistentePersona4(negocio: Negocio) {
-    println("\n**************************************************")
-    println("        ASISTENTE IA DE KRONO CORP")
-    println("**************************************************")
-    println("Opciones sugeridas para tu negocio:")
-    if (negocio.preguntasIA.isEmpty()) {
-        println("- No tienes preguntas configuradas aún.")
-    } else {
-        negocio.preguntasIA.forEachIndexed { i, p -> println("  ${i + 1}. $p") }
-    }
-    println("\n[AQUÍ PERSONA 4 IMPLEMENTARÁ LA CONVERSACIÓN CON LA IA]")
-}
+// La implementación está en AsistenteAdmin/AsistenteAdmin.kt (Persona 4)
+fun asistentePersona4(negocio: Negocio) = AsistenteAdmin.asistenteNegocio(negocio)
 
-fun historialReportesPersona4() {
-    println("\n[AQUÍ PERSONA 4 IMPLEMENTARÁ EL HISTORIAL DE REPORTES]")
-}
+fun historialReportesPersona4(negocio: Negocio) = AsistenteAdmin.historialReportesNegocio(negocio)
 
-fun historialGraficosPersona4() {
-    println("\n[AQUÍ PERSONA 4 IMPLEMENTARÁ EL HISTORIAL DE GRÁFICOS]")
-}
+fun historialGraficosPersona4(negocio: Negocio) = AsistenteAdmin.historialGraficosNegocio(negocio)
 
-fun nuevaCuentaAdministracionPersona4() {
-    println("\n[AQUÍ PERSONA 4 IMPLEMENTARÁ NUEVA CUENTA DE ADMINISTRACIÓN]")
-}
+fun nuevaCuentaAdministracionPersona4(usuario: User) = AsistenteAdmin.nuevaCuentaAdministracion(usuario)
