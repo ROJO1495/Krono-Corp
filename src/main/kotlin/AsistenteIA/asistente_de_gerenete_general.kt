@@ -336,3 +336,93 @@ private fun imprimirSupervisor(s: SupervisorEquipo) {
     println("  Equipo:    ${s.equipo}")
     println("-".repeat(36))
 }
+
+//Preguntas estaticas y dinamicas del Asistente
+fun preguntasEstaticas() {
+    println("Que te gustaria hacer hoy? (Escoge el numero de la opcion que deseas realizar, sino puedes preguntarle lo que gustes al asistente IA)")
+    println("\n 1. Consultar datos de los supervisores de ventas")
+    println("\n 2. Buscar supervisor de venta")
+    println("\n 3. Generar un reporte pdf de los supervisores de ventas con sus promedios de ventas")
+    println("\n 4. Quitar o agregar algun supervisor de ventas")
+    println("\n 5. Cerrar el programa")
+
+    //Respuestas que dara el usuario a las preguntas estaticas
+    try {
+        var opciondeIA = readln().toInt()
+
+        when (opciondeIA) {
+            1 -> {
+                println("\n===== Supervisores de ventas =====")
+                if (listaSupervisores.isEmpty()) {
+                    println("No hay supervisores registrados.")
+                } else {
+                    println("%-4s %-14s %-28s %-10s %-8s".format("ID", "Nombre", "Correo", "Telefono", "Equipo"))
+                    println("=".repeat(68))
+                    listaSupervisores.forEach {
+                        println("%-4s %-14s %-28s %-10s %-8s".format(it.id, it.nombreSupervisor, it.gmail, it.phoneNumber, it.equipo))
+                    }
+                }
+                val libres = equiposLibres()
+                if (libres.isNotEmpty()) {
+                    println("\nEquipos sin supervisor: ${libres.joinToString(", ")}")
+                }
+                println()
+                return preguntasEstaticas()
+            }
+            2 -> {
+                println("Digite el nombre, id, correo o numero de telefono del supervisor que desea encontrar")
+                val busqueda = readln().trim()
+                //filter (en vez de find) para mostrar todas las coincidencias, ej. dos supervisores con el mismo telefono
+                val encontrados = listaSupervisores.filter {
+                    it.nombreSupervisor.equals(busqueda, ignoreCase = true) ||
+                        it.id.toString() == busqueda ||
+                        it.phoneNumber == busqueda ||
+                        it.gmail.equals(busqueda, ignoreCase = true)
+                }
+                if (encontrados.isEmpty()) {
+                    println("\nNo se encontro ningun supervisor con \"$busqueda\".")
+                } else {
+                    println("\nSe encontro ${encontrados.size} supervisor(es):")
+                    encontrados.forEach { imprimirSupervisor(it) }
+                }
+                println()
+                return preguntasEstaticas()
+            }
+            3 -> {
+                println("Generando $reportePdf ...")
+                if (generarReportePdf(reportePdf)) {
+                    println("Reporte generado con exito en: ${File(reportePdf).absolutePath}")
+                }
+                return preguntasEstaticas()
+            }
+            4 -> {
+                gestionarSupervisores()
+                return preguntasEstaticas()
+            }
+            5 -> {
+                return println("Gracias por haber usado Krono, tu asistente Empresarial favorito, te esperamos pronto!")
+            }
+        }
+    } catch (e: Exception) {
+        //Si el usuario digita un valor que no es numerico la IA respondera su pregunta
+        println("Hola soy Krono")
+        println("Como puedo ayudarte?")
+        val textoIA = readln().trim()
+        val respuestaIA = gestorIA.procesarPregunta(textoIA)
+        println("\nKrono:")
+        println(respuestaIA)
+    }
+}
+
+fun AsistenteIA() {
+    datosSupervisores()
+    //Preguntas estaticas
+    println("Bienvenido de nuevo, $emaill")
+    preguntasEstaticas()
+
+    //Preguntas dinamicas
+    //En esta parte se aplicaran las IAs como Gemini y Grok pero sera para casos especificos
+    //como por ejemplo una pregunta que el usuario realice y que no este disponible en el menu,
+    //Generar reportes o graficos.
+
+}
