@@ -31,3 +31,20 @@ import java.awt.Color
 import java.io.ByteArrayOutputStream
 import java.text.DecimalFormat
 import javax.imageio.ImageIO
+
+@Serializable
+data class VentaIntegrante(
+    val equipo: String,
+    val integrante: String,
+    @SerialName("ventas_realizadas") val ventasRealizadas: Int
+)
+
+@Serializable
+data class SupervisorEquipo(
+    val id: Int,
+    val nombreSupervisor: String,
+    val gmail: String,
+    val phoneNumber: String,
+    val equipo: String
+)
+
