@@ -1,0 +1,16 @@
+[
+    {
+        "id": 2,
+        "nombreSupervisor": "Ismael",
+        "gmail": "ismael@gmail.com",
+        "phoneNumber": "69783681",
+        "equipo": "Sur"
+    },
+    {
+        "id": 3,
+        "nombreSupervisor": "Amilcar",
+        "gmail": "amilcar@gmail.com",
+        "phoneNumber": "70888141",
+        "equipo": "Norte"
+    }
+]
