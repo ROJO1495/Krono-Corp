@@ -48,3 +48,14 @@ data class SupervisorEquipo(
     val equipo: String
 )
 
+//Variable de llamada del gestorIA
+val gestorIA = GestorIA()
+
+//Variables para llamar al archivo .json y corroborar si el archivo ya existe
+val archivoSupervisores = File("supervisores.json")
+val archivojsonSupervisores = Json { prettyPrint = true }
+
+val listaSupervisores = mutableListOf<SupervisorEquipo>()
+
+//Variable para el documento pdf
+val reportePdf = "Promedios_de_ventas.pdf"
