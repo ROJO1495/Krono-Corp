@@ -248,3 +248,91 @@ fun guardarSupervisores() {
 fun equiposLibres(): List<String> =
     equiposDisponibles.filter { eq -> listaSupervisores.none { it.equipo.equals(eq, ignoreCase = true) } }
 
+//Submenu de la opcion 4
+fun gestionarSupervisores() {
+    while (true) {
+        println("\nGestion de supervisores")
+        println("1. Agregar supervisor")
+        println("2. Eliminar supervisor")
+        println("3. Volver al menu principal")
+        when (readln().trim()) {
+            "1" -> agregarSupervisor()
+            "2" -> eliminarSupervisor()
+            "3" -> return
+            else -> println("Opcion no valida.")
+        }
+    }
+}
+ 
+private fun agregarSupervisor() {
+    val libres = equiposLibres()
+    if (libres.isEmpty()) {
+        println("Todos los equipos ya tienen supervisor. Elimina uno primero para liberar un equipo.")
+        return
+    }
+ 
+    println("Equipos libres: ${libres.joinToString(", ")}")
+    println("Digite el nombre del supervisor:")
+    val nombre = readln().trim()
+    println("Digite el correo del supervisor:")
+    val gmail = readln().trim()
+    println("Digite el numero de telefono del supervisor:")
+    val telefono = readln().trim()
+ 
+    if (nombre.isEmpty() || gmail.isEmpty() || telefono.isEmpty()) {
+        println("Todos los campos son obligatorios. No se agrego el supervisor.")
+        return
+    }
+ 
+    println("Digite el equipo que tendra a cargo (${libres.joinToString(", ")}):")
+    val equipo = libres.find { it.equals(readln().trim(), ignoreCase = true) }
+    if (equipo == null) {
+        println("Equipo no valido o no disponible. No se agrego el supervisor.")
+        return
+    }
+ 
+    //maxOf + 1 evita repetir ids despues de eliminar supervisores
+    val nuevoId = (listaSupervisores.maxOfOrNull { it.id } ?: 0) + 1
+    listaSupervisores.add(SupervisorEquipo(nuevoId, nombre, gmail, telefono, equipo))
+    guardarSupervisores()
+    println("Supervisor $nombre agregado al equipo $equipo (id $nuevoId).")
+}
+ 
+private fun eliminarSupervisor() {
+    if (listaSupervisores.isEmpty()) {
+        println("No hay supervisores registrados.")
+        return
+    }
+ 
+    listaSupervisores.forEach { println("Id ${it.id} - ${it.nombreSupervisor} (Equipo ${it.equipo})") }
+    println("Digite el id o el nombre del supervisor que desea eliminar:")
+    val busqueda = readln().trim()
+    val supervisor = listaSupervisores.find {
+        it.id.toString() == busqueda || it.nombreSupervisor.equals(busqueda, ignoreCase = true)
+    }
+    if (supervisor == null) {
+        println("Supervisor no encontrado.")
+        return
+    }
+ 
+    println("Seguro que desea eliminar a ${supervisor.nombreSupervisor}? (s/n)")
+    if (!readln().trim().equals("s", ignoreCase = true)) {
+        println("Operacion cancelada.")
+        return
+    }
+ 
+    listaSupervisores.remove(supervisor)
+    guardarSupervisores()
+    println("Supervisor eliminado. El equipo ${supervisor.equipo} quedo libre para un nuevo supervisor.")
+}
+
+//Datos de supervisor en forma de ficha
+private fun imprimirSupervisor(s: SupervisorEquipo) {
+    println("-".repeat(36))
+    println("  Id:        ${s.id}")
+    println("  Nombre:    ${s.nombreSupervisor}")
+    println("  Correo:    ${s.gmail}")
+    println("  Telefono:  ${s.phoneNumber}")
+    println("  Equipo:    ${s.equipo}")
+    println("-".repeat(36))
+}
