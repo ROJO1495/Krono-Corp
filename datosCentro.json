@@ -1,0 +1,23 @@
+[
+    {
+        "equipo": "Centro",
+        "integrante": "Pedro",
+        "ventas_realizadas": 5
+        
+    },
+    {
+        "equipo": "Centro",
+        "integrante": "Sofia",
+        "ventas_realizadas": 5
+    },
+    {
+        "equipo": "Centro",
+        "integrante": "Candy",
+        "ventas_realizadas": 3
+    },
+    {
+        "equipo": "Centro",
+        "integrante": "Dubai",
+        "ventas_realizadas": 3
+    }
+]

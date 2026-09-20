@@ -1,0 +1,23 @@
+[
+    {
+        "equipo": "Norte",
+        "integrante": "Vegeta",
+        "ventas_realizadas": 5
+        
+    },
+    {
+        "equipo": "Norte",
+        "integrante": "Homero",
+        "ventas_realizadas": 5
+    },
+    {
+        "equipo": "Norte",
+        "integrante": "Marge",
+        "ventas_realizadas": 3
+    },
+    {
+        "equipo": "Norte",
+        "integrante": "Picolo",
+        "ventas_realizadas": 3
+    }
+]

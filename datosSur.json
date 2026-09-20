@@ -1,0 +1,23 @@
+[
+    {
+        "equipo": "Sur",
+        "integrante": "Askeladd",
+        "ventas_realizadas": 5
+        
+    },
+    {
+        "equipo": "Sur",
+        "integrante": "Thorfinn",
+        "ventas_realizadas": 5
+    },
+    {
+        "equipo": "Sur",
+        "integrante": "Totoro",
+        "ventas_realizadas": 3
+    },
+    {
+        "equipo": "Sur",
+        "integrante": "Goku",
+        "ventas_realizadas": 3
+    }
+]
