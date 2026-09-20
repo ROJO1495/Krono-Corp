@@ -59,3 +59,17 @@ val listaSupervisores = mutableListOf<SupervisorEquipo>()
 
 //Variable para el documento pdf
 val reportePdf = "Promedios_de_ventas.pdf"
+
+//Abrir archivo .json para leer supervisor.json
+fun datosSupervisores() {
+    if (archivoSupervisores.exists() && archivoSupervisores.length() > 0) {
+        try {
+            val contenidoJson = archivoSupervisores.readText()
+            //lista de supervisores
+            val supervisoresGuardados = Json.decodeFromString<List<SupervisorEquipo>>(contenidoJson)
+            listaSupervisores.addAll(supervisoresGuardados)
+        } catch (e: Exception) {
+            println("Error al leer el archivo, es probable que el archivo supervisores.json este corrupto")
+        }
+    }
+}
