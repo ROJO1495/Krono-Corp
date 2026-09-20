@@ -1,7 +1,20 @@
 [
     {
+        "alias": "Gustavo",
         "email": "gustavoisr14@gmail.com",
         "phoneNumber": "69783681",
         "password": "123456"
+    },
+    {
+        "alias": "Ismael",
+        "email": "ismael@gmail.com",
+        "phoneNumber": "69783681",
+        "password": "123456"
+    },
+    {
+        "alias": "clau",
+        "email": "clau@gmail.com",
+        "phoneNumber": "23456789",
+        "password": "12345678"
     }
 ]
