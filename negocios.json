@@ -1,0 +1,26 @@
+[
+    {
+        "nombreNegocio": "Veterinaria Mejicanos",
+        "propietarioEmail": "gatoGordo@gmail.com",
+        "tipo": "PROPIO",
+        "preguntasIA": [
+            "¨Cual fue el mes con mas gatos recibidos?"
+        ],
+        "sucursales": [
+            {
+                "id": "SUC-1",
+                "nombre": "Sucursal Veterinaria Miau -  Mejicanos",
+                "codigoAcceso": "12345678"
+            }
+        ]
+    },
+    {
+        "nombreNegocio": "Candy's",
+        "propietarioEmail": "sophia@gmail.com",
+        "tipo": "PROPIO",
+        "preguntasIA": [
+            "Sobre Productos: ¿Cuál es el producto más vendido?",
+            "Sobre Ventas: ¿Cuáles son los meses con mayores ventas?"
+        ]
+    }
+]
