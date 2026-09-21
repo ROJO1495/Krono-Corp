@@ -26,6 +26,8 @@ dependencies {
     // This dependency is used by the application.
     implementation(libs.guava)
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+    implementation("com.github.librepdf:openpdf:3.0.0")
+    implementation("org.jfree:jfreechart:1.5.5")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -51,4 +53,10 @@ tasks.named<JavaExec>("run") {
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+}
+
+tasks.withType<JavaExec>().configureEach {
+    systemProperty("file.encoding", "UTF-8")
+    systemProperty("stdout.encoding", "UTF-8")
+    systemProperty("stderr.encoding", "UTF-8")
 }
