@@ -3,6 +3,9 @@ package AsistenteIA
 import Login.emaill
 import Login.listaUsuarios
 
+//Importacion de archivos IA
+import IA.GestorIA
+
 //Importaciones para archivos .json
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -247,7 +250,7 @@ fun guardarSupervisores() {
 //Un equipo esta libre cuando ningun supervisor lo tiene asignado
 fun equiposLibres(): List<String> =
     equiposDisponibles.filter { eq -> listaSupervisores.none { it.equipo.equals(eq, ignoreCase = true) } }
-
+ 
 //Submenu de la opcion 4
 fun gestionarSupervisores() {
     while (true) {
@@ -337,6 +340,49 @@ private fun imprimirSupervisor(s: SupervisorEquipo) {
     println("-".repeat(36))
 }
 
+//Historial de la conversacion actual con Krono (se borra cuando el usuario cierra el chat)
+private val historialChat = mutableListOf<Pair<String, String>>()
+private const val MAX_TURNOS_MEMORIA = 10
+private const val MAX_CARACTERES_RESPUESTA = 800
+
+//procesarPregunta() recibe un solo texto, asi que se le une la conversacion anterior a la nueva pregunta
+private fun construirPrompt(preguntaNueva: String): String {
+    if (historialChat.isEmpty()) return preguntaNueva
+    val contexto = historialChat.takeLast(MAX_TURNOS_MEMORIA)
+        .joinToString("\n") { (pregunta, respuesta) -> "Usuario: $pregunta\nKrono: $respuesta" }
+    return "Conversacion anterior:\n$contexto\n\n" +
+        "Responde a la nueva pregunta teniendo en cuenta la conversacion anterior.\n" +
+        "Nueva pregunta del usuario: $preguntaNueva"
+}
+
+//Chat con Krono: sigue respondiendo y recordando la conversacion hasta que el usuario escriba "salir"
+private fun chatConKrono(primerMensaje: String) {
+    println("\nHola soy Krono")
+    println("(Escribe \"salir\" cuando quieras cerrar el chat y volver al menu)")
+    var texto = primerMensaje
+    while (true) {
+        if (texto.equals("salir", ignoreCase = true)) {
+            historialChat.clear()
+            println("\nKrono: Chat cerrado. Vuelvo al menu.\n")
+            return
+        }
+        if (texto.isEmpty()) {
+            println("\nKrono: Escribe tu pregunta o \"salir\" para cerrar el chat.")
+        } else {
+            try {
+                val respuesta = gestorIA.procesarPregunta(construirPrompt(texto)).toString()
+                println("\nKrono:")
+                println(respuesta)
+                historialChat.add(texto to respuesta.take(MAX_CARACTERES_RESPUESTA))
+            } catch (e: Exception) {
+                println("\nKrono: No pude responder en este momento (${e.message}). Intenta de nuevo.")
+            }
+        }
+        print("\nTu: ")
+        texto = readlnOrNull()?.trim() ?: return
+    }
+}
+
 //Preguntas estaticas y dinamicas del Asistente
 fun preguntasEstaticas() {
     println("Que te gustaria hacer hoy? (Escoge el numero de la opcion que deseas realizar, sino puedes preguntarle lo que gustes al asistente IA)")
@@ -347,70 +393,71 @@ fun preguntasEstaticas() {
     println("\n 5. Cerrar el programa")
 
     //Respuestas que dara el usuario a las preguntas estaticas
-    try {
-        var opciondeIA = readln().toInt()
+    val entrada = readln().trim()
+    val opcion = entrada.toIntOrNull()
 
-        when (opciondeIA) {
-            1 -> {
-                println("\n===== Supervisores de ventas =====")
-                if (listaSupervisores.isEmpty()) {
-                    println("No hay supervisores registrados.")
-                } else {
-                    println("%-4s %-14s %-28s %-10s %-8s".format("ID", "Nombre", "Correo", "Telefono", "Equipo"))
-                    println("=".repeat(68))
-                    listaSupervisores.forEach {
-                        println("%-4s %-14s %-28s %-10s %-8s".format(it.id, it.nombreSupervisor, it.gmail, it.phoneNumber, it.equipo))
-                    }
+    //Si el usuario no digita un numero, ese texto es su primera pregunta y empieza el chat con Krono
+    if (opcion == null) {
+        chatConKrono(entrada)
+        return preguntasEstaticas()
+    }
+
+    when (opcion) {
+        1 -> {
+            println("\n===== Supervisores de ventas =====")
+            if (listaSupervisores.isEmpty()) {
+                println("No hay supervisores registrados.")
+            } else {
+                println("%-4s %-14s %-28s %-10s %-8s".format("ID", "Nombre", "Correo", "Telefono", "Equipo"))
+                println("=".repeat(68))
+                listaSupervisores.forEach {
+                    println("%-4s %-14s %-28s %-10s %-8s".format(it.id, it.nombreSupervisor, it.gmail, it.phoneNumber, it.equipo))
                 }
-                val libres = equiposLibres()
-                if (libres.isNotEmpty()) {
-                    println("\nEquipos sin supervisor: ${libres.joinToString(", ")}")
-                }
-                println()
-                return preguntasEstaticas()
             }
-            2 -> {
-                println("Digite el nombre, id, correo o numero de telefono del supervisor que desea encontrar")
-                val busqueda = readln().trim()
-                //filter (en vez de find) para mostrar todas las coincidencias, ej. dos supervisores con el mismo telefono
-                val encontrados = listaSupervisores.filter {
-                    it.nombreSupervisor.equals(busqueda, ignoreCase = true) ||
-                        it.id.toString() == busqueda ||
-                        it.phoneNumber == busqueda ||
-                        it.gmail.equals(busqueda, ignoreCase = true)
-                }
-                if (encontrados.isEmpty()) {
-                    println("\nNo se encontro ningun supervisor con \"$busqueda\".")
-                } else {
-                    println("\nSe encontro ${encontrados.size} supervisor(es):")
-                    encontrados.forEach { imprimirSupervisor(it) }
-                }
-                println()
-                return preguntasEstaticas()
+            val libres = equiposLibres()
+            if (libres.isNotEmpty()) {
+                println("\nEquipos sin supervisor: ${libres.joinToString(", ")}")
             }
-            3 -> {
-                println("Generando $reportePdf ...")
-                if (generarReportePdf(reportePdf)) {
-                    println("Reporte generado con exito en: ${File(reportePdf).absolutePath}")
-                }
-                return preguntasEstaticas()
-            }
-            4 -> {
-                gestionarSupervisores()
-                return preguntasEstaticas()
-            }
-            5 -> {
-                return println("Gracias por haber usado Krono, tu asistente Empresarial favorito, te esperamos pronto!")
-            }
+            println()
+            return preguntasEstaticas()
         }
-    } catch (e: Exception) {
-        //Si el usuario digita un valor que no es numerico la IA respondera su pregunta
-        println("Hola soy Krono")
-        println("Como puedo ayudarte?")
-        val textoIA = readln().trim()
-        val respuestaIA = gestorIA.procesarPregunta(textoIA)
-        println("\nKrono:")
-        println(respuestaIA)
+        2 -> {
+            println("Digite el nombre, id, correo o numero de telefono del supervisor que desea encontrar")
+            val busqueda = readln().trim()
+            //filter (en vez de find) para mostrar todas las coincidencias, ej. dos supervisores con el mismo telefono
+            val encontrados = listaSupervisores.filter {
+                it.nombreSupervisor.equals(busqueda, ignoreCase = true) ||
+                    it.id.toString() == busqueda ||
+                    it.phoneNumber == busqueda ||
+                    it.gmail.equals(busqueda, ignoreCase = true)
+            }
+            if (encontrados.isEmpty()) {
+                println("\nNo se encontro ningun supervisor con \"$busqueda\".")
+            } else {
+                println("\nSe encontro ${encontrados.size} supervisor(es):")
+                encontrados.forEach { imprimirSupervisor(it) }
+            }
+            println()
+            return preguntasEstaticas()
+        }
+        3 -> {
+            println("Generando $reportePdf ...")
+            if (generarReportePdf(reportePdf)) {
+                println("Reporte generado con exito en: ${File(reportePdf).absolutePath}")
+            }
+            return preguntasEstaticas()
+        }
+        4 -> {
+            gestionarSupervisores()
+            return preguntasEstaticas()
+        }
+        5 -> {
+            return println("Gracias por haber usado Krono, tu asistente Empresarial favorito, te esperamos pronto!")
+        }
+        else -> {
+            println("\nOpcion no valida. Escoge un numero del 1 al 5 o escribe tu pregunta.\n")
+            return preguntasEstaticas()
+        }
     }
 }
 
