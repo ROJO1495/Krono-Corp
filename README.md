@@ -23,7 +23,7 @@ Esto es lo que teníamos planeado en el documento y cómo va cada cosa:
 - App Android con Jetpack Compose: todavía no, por ahora es de consola.
 - Appwrite para guardar los datos: todavía no, por ahora guardamos todo en archivos JSON.
 - Groq para el chat: sí está, aunque usamos el modelo `openai/gpt-oss-120b` y no Llama 3.3 como decía el documento.
-- Gemini para los reportes: todavía no. Los reportes en PDF los hacemos con OpenPDF y JFreeChart.
+- Gemini para los reportes: no se pudo. El modelo que teníamos planeado (Gemini 1.5 Flash) ya fue dado de baja por Google y dejó de funcionar en 2025. Por eso los reportes en PDF los hacemos con OpenPDF y JFreeChart.
 
 ## Tecnologías
 
@@ -198,7 +198,7 @@ Al ejecutar el programa también se generan los PDF de los reportes y el archivo
 - Las contraseñas se guardan en texto plano en `usuario.json`. Por ahora son solo datos de prueba, pero hay que cambiarlo.
 - El asistente del negocio usa datos de ejemplo fijos y respuestas simuladas, no analiza las ventas reales.
 - Los datos de ventas de los equipos (`datos*.json`) son inventados.
-- Gemini no está integrado.
+- Gemini no está integrado porque Gemini 1.5 Flash, el modelo que habíamos planeado, ya no está disponible. Si más adelante queremos usar Gemini, habría que cambiarlo a un modelo más nuevo.
 - No tenemos pruebas automáticas.
 
 Lo que sigue sería pasar la interfaz a Android con Jetpack Compose siguiendo el diseño de Figma, cambiar los JSON por Appwrite, conectar el asistente del negocio a la IA con los datos reales, guardar las contraseñas cifradas y agregar pruebas.
