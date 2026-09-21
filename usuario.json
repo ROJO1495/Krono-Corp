@@ -3,18 +3,28 @@
         "alias": "Gustavo",
         "email": "gustavoisr14@gmail.com",
         "phoneNumber": "69783681",
-        "password": "123456"
+        "password": "123456",
+        "role": "GERENTE"
     },
     {
         "alias": "Ismael",
         "email": "ismael@gmail.com",
         "phoneNumber": "69783681",
-        "password": "123456"
+        "password": "123456",
+        "role": "SUPERVISOR"
     },
     {
         "alias": "clau",
         "email": "clau@gmail.com",
         "phoneNumber": "23456789",
-        "password": "12345678"
+        "password": "12345678",
+        "role": "SUPERVISOR"
+    },
+    {
+        "alias": "coco",
+        "email": "gatoGordo@gmail.com",
+        "phoneNumber": "60711226",
+        "password": "gato",
+        "role": "DUENO"
     }
 ]

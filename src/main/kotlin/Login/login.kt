@@ -42,17 +42,21 @@ val listaUsuarios = mutableListOf<User>()
 
 fun opcionesInicio() {
     // Variables para seleccion inicial
-    var opcion: Int
     println("==========================================")
     println("Presiona 1 para iniciar sesion")
     println("Presiona 2 para registrarte")
-    opcion = readln().toInt()
+    // toIntOrNull evita que el programa se caiga si se escribe algo que no es un numero
+    val opcion = readln().trim().toIntOrNull()
     when (opcion) {
         1 -> {
             inicioSesion()
         }
         2 -> {
             registro()
+        }
+        else -> {
+            println("Opcion invalida. Escribe 1 o 2.")
+            return main()
         }
     }
 }
@@ -62,14 +66,19 @@ fun inicioSesion() {
     println("Bienvenido de nuevo")
     println("Por favor, Ingresa tu correo electronico o su nombre de usuario:")
     val credencial = readln().trim()
-    val usuarioExistente = listaUsuarios.find { it.email.equals(credencial, ignoreCase = true) || it.alias.equals(credencial, ignoreCase = true)}
+    println("Por favor, Ingresa tu contraseña:")
+    passwordd = readln().trim()
+    // Se valida el usuario (correo o alias) junto con la contraseña. Asi tambien funcionan
+    // las cuentas adicionales que comparten el correo del dueño y tienen su propia contraseña.
+    val usuarioExistente = listaUsuarios.find {
+        (it.email.equals(credencial, ignoreCase = true) || it.alias.equals(credencial, ignoreCase = true)) &&
+            it.password == passwordd
+    }
     if (usuarioExistente == null) {
         println("Credenciales Incorrectas. Por favor registres sus credenciales correctas o registre un nuevo usuario")
         return main()
     }
-    println("Por favor, Ingresa tu contraseña:")
-    passwordd = readln().trim()
-    
+
     aliass = usuarioExistente.alias
     emaill = usuarioExistente.email
     phoneNumberr = usuarioExistente.phoneNumber
@@ -96,7 +105,6 @@ fun registro() {
         return main()
     }
     
-    var opcion: Int
     println("Por favor, ingresa tu numero de telefono")
     phoneNumberr = readln().trim()
     println("Por favor, ingresa tu contraseña")
@@ -104,8 +112,9 @@ fun registro() {
     println("Cual es tu rol?")
     println("\n- Digita 1 si eres Gerente General")
     println("\n- Digita 2 si eres Supervisor de Ventas")
-    opcion = readln().toInt()
-    
+    println("\n- Digita 3 si eres Dueño de un negocio")
+    val opcion = readln().trim().toIntOrNull()
+
     fun registroUsuario(): User {
         //Registro del usuario en el archivo .json
         val nuevoUsuario = User(
@@ -146,12 +155,19 @@ fun registro() {
             val nuevoUsuario = registroUsuario()
             showHome(nuevoUsuario, listaUsuarios)
         }
+        else -> {
+            // No se guarda nada si el rol no es valido
+            println("Opcion invalida. No se registro el usuario, intenta de nuevo.")
+            return main()
+        }
     }
 
     //AsistenteIA()
 }
 
-fun main() {    
+fun main() {
+    // main() se vuelve a llamar tras un error; se limpia la lista para no duplicar usuarios
+    listaUsuarios.clear()
     if (archivo.exists() && archivo.length() > 0) {
         try {
             val contenidoJson = archivo.readText()
@@ -160,6 +176,9 @@ fun main() {
             listaUsuarios.addAll(usuariosGuardados)
         } catch (e: Exception) {
             println("Error al leer el archivo, es probable que el archivo usuario.json este corrupto")
+            println("Detalle: ${e.message}")
+            // Se detiene para no sobrescribir usuario.json con una lista vacia y perder los usuarios
+            return
         }
     }
     
