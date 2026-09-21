@@ -52,20 +52,6 @@ Hay que poner el `--console=plain`, si no la barra de progreso de Gradle se mezc
 
 Si en Windows los acentos salen con símbolos raros, se puede correr `chcp 65001` antes.
 
-### Clave de Groq
-
-Para hablar con la IA del Gerente General se necesita la variable de entorno `GROQ_API_KEY`. La clave no se sube nunca al repositorio.
-
-```
-# solo para esa terminal
-$env:GROQ_API_KEY = "tu_clave"
-
-# permanente (hay que abrir otra terminal)
-setx GROQ_API_KEY "tu_clave"
-```
-
-Si no está la clave todo lo demás funciona igual, solo que las preguntas libres a la IA responden que no encontró la variable. Las opciones con número no la necesitan.
-
 ### Usuarios de prueba
 
 Se puede entrar con el correo o con el alias.
