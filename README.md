@@ -72,6 +72,8 @@ Krono-Corp/
   build.gradle.kts          dependencias y clase principal
   settings.gradle.kts       nombre del proyecto
   gradle/                   catálogo de versiones y el wrapper
+  gradlew, gradlew.bat      para correr el proyecto sin instalar Gradle
+  .gitignore                archivos que no se suben (build, .gradle, *.log, etc.)
   src/main/kotlin/
     Login/login.kt          inicio de sesión y registro (aquí empieza el programa)
     Gerente/admin.kt        menú por roles y menú del Gerente General
