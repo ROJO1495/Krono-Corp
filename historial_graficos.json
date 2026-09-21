@@ -1,0 +1,9 @@
+[
+    {
+        "id": 1,
+        "autor": "sophia@gmail.com",
+        "titulo": "Grafico de ventas por producto",
+        "fecha": "20/09/2026 22:15",
+        "contenido": "Unidades vendidas por producto\nCamisa     | ################ 12\nPantalon   | ######### 7\nZapatos    | ##### 4\nGorra      | #################### 15"
+    }
+]
